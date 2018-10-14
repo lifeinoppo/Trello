@@ -25,6 +25,8 @@
 
     var boardData = initData()
 
+    // console.log('data is : '+boardData)
+
     //初始化背景以及标题信息
     function contentHeader(boardData) {
         var body = document.querySelector('body')
@@ -57,7 +59,7 @@
                 renameBoard.hidden = true
                 boardData.header = input.value
                 boardData.save()
-                console.log(data)
+                // console.log(data)   jxc 
                 updateList(['starred-boards', 'personal-boards'], data)
             }
         }
@@ -67,30 +69,21 @@
             renameBoard.hidden = true
         }
 
+/*
         var starBtn = header.querySelector('.star-btn')
         updateStarBtn()
         starBtn.onclick = function () {
-            if (this.classList.contains('starred')) {
-                var n = data.feature['starred-boards'].indexOf(boardData.id)
-                data.feature['starred-boards'].splice(n, 1)
-            }
-            else {
-                data.feature['starred-boards'].push(boardData.id)
-            }
-            boardData.save()
-            var newEvent = new Event('starChange')
-            window.dispatchEvent(newEvent)
+            // 加入 star功能，在日后需要的时候
         }
-
-        function updateStarBtn() {
-            starBtn.classList.toggle('starred', data.feature['starred-boards'].indexOf(boardData.id) > -1)
-        }
-
-        window.addEventListener('starChange', updateStarBtn)
+*/        
 
     }
 
     contentHeader(boardData)
+
+
+
+
 
     //创建列表内容
     function contentList(boardData) {
@@ -197,7 +190,7 @@
 
             btn.onclick = function(event, value) {
                 event.preventDefault()
-                addListItem(value, wrapper)
+                addListItem(value, wrapper)    
             }
             btnclose.onclick = closeAddList
             input.edit()
@@ -327,7 +320,7 @@
     }
 
     function createCardItem(value, ul) {
-        var li = document.createElement('li')
+        var li = document.createElement('li')    // jxc 
         var newId = boardData.cards.length
 
         var cardInput = adaptArea(li, value, function (value) {
@@ -354,7 +347,9 @@
         var list = ul.parentNode
         var l_id = list.dataset.l_id
         boardData.lists[l_id].cardList.push(newId)
+        // newtrello(value,boardData.lists[l_id].title,boardData.header)   // jxc  123
         boardData.save()
+        // newtrello(JSON.stringify(data))  // jxc 直接保存boardData
 
         ul.appendChild(li)
         return li

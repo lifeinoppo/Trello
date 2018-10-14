@@ -3,110 +3,87 @@ var changeStarEvent = new Event('starChange')
 var data = getData()
 
 //根据数据呈现内容
-function createList(feature, data) {
-    var arr = featureList(feature, data)
-    if (arr.length > 0) {
-        var div = document.createElement('div')
-        div.className = feature
+function createList(data) {
+    var arr = data.boards;    // jxc 
 
-        var header = document.createElement('header')
-        var h3 = document.createElement('h3')
-        h3.innerText = feature.replace('-', ' ')
-        var button = document.createElement('button')
-        button.className = 'collapseBtn'
-        button.innerText = '-'
+    var div = document.createElement('div')
+    div.className = 'boards'
 
-        button.addEventListener('click', function () {
-            if (ul.hidden) {
-                ul.hidden = false
-                this.innerText = '-'
-            }
-            else {
-                ul.hidden = true
-                this.innerText = '+'
-            }
-        })
+    var header = document.createElement('header')
+    var h3 = document.createElement('h3')
+    h3.innerText = 'boards'   // jxc 
+    var button = document.createElement('button')
+    button.className = 'collapseBtn'
+    button.innerText = '-'
 
-        header.appendChild(h3)
-        header.appendChild(button)
-
-        var ul = document.createElement('ul')
-        for (var i = 0; i < arr.length; i++) {
-            var li = createItem(arr[i], data)
-            ul.appendChild(li)
+    button.addEventListener('click', function () {
+        if (ul.hidden) {
+            ul.hidden = false
+            this.innerText = '-'
         }
+        else {
+            ul.hidden = true
+            this.innerText = '+'
+        }
+    })
 
-        div.appendChild(header)
-        div.appendChild(ul)
+    header.appendChild(h3)
+    header.appendChild(button)
 
-        return div
+    var ul = document.createElement('ul')
+    for (var i = 0; i < arr.length; i++) {
+        var li = createItem(arr[i], data)
+        ul.appendChild(li)
     }
-    else {
-        return false
-    }
+
+    div.appendChild(header)
+    div.appendChild(ul)
+
+    return div
+
 }
-
+/*  deleted by jxc for feature not needed 
 function featureList(feature, data) {
     //筛选不同的list数据
+    
     var list = data.feature[feature]
     return list.map(function (el) {
         return data.boards.find(function (val) {
             return val.id === el
         })
     })
+    
 }
+*/
 
+// 此函数只会在初始化时被调用一次
 function createItem(obj, data) {
     var li = document.createElement('li')
     li.dataset.id = obj.id
     li.innerHTML = '<label>' + obj.header + '</label>'
-    if (data.feature['starred-boards'].indexOf(obj.id) === -1) {
-        li.classList.add('unstarred')
-    }
 
-    if (obj.bg[0] === 'color') {
-        li.style.backgroundColor = data.color[obj.bg[1]]
-    }
-    else {
-        li.style.backgroundImage = 'url(common/data/img/' + data.img[obj.bg[1]] + '_small.jpg)'
-    }
+    li.style.backgroundColor = data.color['cyan']   // jxc ,制定todo板的颜色
+
 
     var btn = document.createElement('button')
 
-    //改变star或unstar，并更新数据
-    btn.addEventListener('click', function (event) {
-        event.preventDefault()
-        event.stopPropagation()
-        var parent = this.parentNode
-        var currentId = parseInt(parent.dataset.id)
-
-        if (!parent.classList.contains('unstarred')) {
-            var n = data.feature['starred-boards'].indexOf(currentId)
-            data.feature['starred-boards'].splice(n, 1)
-        }
-        else {
-            data.feature['starred-boards'].push(currentId)
-        }
-        parent.classList.toggle('unstarred')
-        window.dispatchEvent(changeStarEvent)
-    })
     li.appendChild(btn)
     li.addEventListener('click', function () {
-        location.href = 'board/board.html?id=' + this.dataset.id
+        location.href = 'board.html?id=' + this.dataset.id     // jxc 左上角的board快捷方式， 首页场景会失灵，但是首页使用这个按钮的频率很低，故不进行修改
     })
     return li
 }
 
-function initList(arr, data) {
+function initList(data) {
     var sideList = document.querySelector('#sideList')
     var p = sideList.querySelector('p')
 
-    for (var i = 0; i < arr.length; i++) {
-        if (createList(arr[i], data)) {
-            var item = createList(arr[i], data)
-            sideList.insertBefore(item, p)
-        }
+    // jxc 
+    if (createList(data)) {
+        var item = createList(data)
+        sideList.insertBefore(item, p)
     }
+    
     addDrag()
 }
 
@@ -122,7 +99,7 @@ function removeList(arr) {
 
 function updateList(arr, data) {
     removeList(arr)
-    initList(arr, data)
+    initList(data)
 }
 
 //为starredBoard 添加拖拽事件
@@ -246,6 +223,8 @@ function addDrag() {
         logoLink.href = '../index.html'
         header.appendChild(logoLink)
 
+
+        // jxc 首页右上角的button，没啥用, 后期可以加进相应的功能。
         var btnLists = document.createElement('div')
         var createBtn = document.createElement('button')
         createBtn.innerText = '+'
@@ -349,7 +328,7 @@ function addDrag() {
         return sideList
     }
 
-    initList(['starred-boards', 'personal-boards'], data)
+    initList(data)
 })()
 
 //获取move事件传播的所有target
@@ -365,8 +344,10 @@ function eventPath(e) {
     }
     else return e.path
 }
+/*  deleted by jxc  for not needed
 window.addEventListener('starChange', function () {
     saveData(data)
     updateList(['starred-boards', 'personal-boards'], data)
 })
+*/
 

@@ -3,6 +3,8 @@
     //生成可供选择的颜色列表
     var checkedColor = ['color', 'default']
 
+   
+
     function createColorList(ul, arr, n, targetBoard) {
         if(arr.length > 0) {
             for (var i = 0; i < n; i++) {
@@ -180,7 +182,7 @@
                 cards: []
             }
             data.boards.push(newItem)
-            data.feature['personal-boards'].push(len)
+            data.feature['boards'].push(len)
 
             saveData(data)
             location.href = 'board/board.html?id=' + len
@@ -254,10 +256,30 @@
     initCreateNew()
 })()
 
+// added by jxc 20180927
+// use leancloud as storage sync 
+// 创建新的trello记录
+function newtrello(boardData){
+        var Trello = AV.Object.extend('trello');  
+        var trello = new Trello();
+        trello.set('board_data', boardData);
+        trello.save().then(function (trello) {
+        // 成功保存之后，执行其他逻辑.
+            
+        }, function (error) {
+            // 异常处理
+            console.error('Failed to create new object, with error message: ' + error.message);
+        });
+}
+// end of modify by jxc 
+
 function saveData(data) {
     localStorage.setItem('data', JSON.stringify(data))
+    //  同步将数据进行云端保存
+    newtrello(JSON.stringify(data));  // jxc 
     return true
 }
+
 function getData() {
     var data = localStorage.getItem('data')
     return JSON.parse(data)
