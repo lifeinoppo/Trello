@@ -97,7 +97,7 @@ function totalInit () {
     */
     //  从网路获取data数据, 由于异步，需要刷新两次页面才能获取到完整数据，后期调整
     var { Query, User } = AV;
-    // test gitignore 
+    // test gitignore again
     AV.init('Jzs7V61hwrwGnRz20LGrsya0-gzGzoHsz', 'LXnj0ytf6kJyxzfQ7bvqna80');
     var query = new AV.Query('trello');
     query.equalTo('flag', 'boards');
