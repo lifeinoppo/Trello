@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="Pragma" content="no-cache">
     <title>Trello</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -9,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="home.css">
 </head>
 <body>
+   
     <header id="header"></header>
     <div id="headerBoard">
         <div id="searchPanel" hidden>
@@ -29,8 +31,15 @@
         </div>
     </div>
     <main>
+        <button type="button" onclick=" var storage=window.localStorage;storage.clear();">首次使用点击清除缓存</button>
     </main>
     <div class="overlay newone-overlay"><div></div></div>
+    <script type="text/javascript">
+        function clear(){
+                var storage=window.localStorage;
+                storage.clear();
+        } 
+    </script>
     <script src="http://cdn.jsdelivr.net/npm/leancloud-storage@3.10.0/dist/av-min.js"></script>
     <script type="text/javascript" src="common/data/data.js"></script>
     <script type="text/javascript" src="common/createBoard/createBoard.js"></script>
